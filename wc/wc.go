@@ -1,62 +1,29 @@
 package wc
 
 import (
-	"os"
 	"strings"
 	"unicode/utf8"
 )
 
-func GetBytes(fileName string) (int, error) {
-	b, err := readFile(fileName)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return len(b), nil
+func GetBytesLength(b []byte) int {
+	return len(b)
 }
 
-func GetNumberOfLines(fileName string) (int, error) {
-	b, err := readFile(fileName)
-
-	if err != nil {
-		return 0, err
-	}
-
+func GetNumberOfLines(b []byte) int {
 	lines := strings.Split(string(b), "\n")
 	if len(lines) > 0 {
-		return len(lines) - 1, nil
+		return len(lines) - 1
 	} else {
-		return 1, nil
+		return 1
 	}
 }
 
-func GetNumberOfWords(fileName string) (int, error) {
-	b, err := readFile(fileName)
-
-	if err != nil {
-		return 0, err
-	}
-
+func GetNumberOfWords(b []byte) int {
 	words := strings.Fields(string(b))
-	return len(words), nil
+	return len(words)
 }
 
-func GetNumberOfCharacters(fileName string) (int, error) {
-	b, err := readFile(fileName)
-
-	if err != nil {
-		return 0, err
-	}
-
+func GetNumberOfCharacters(b []byte) int {
 	numberOfChar := utf8.RuneCount(b)
-	return numberOfChar, nil
-}
-
-func readFile(filename string) ([]byte, error) {
-	b, err := os.ReadFile(filename)
-	if err != nil {
-		return []byte{}, err
-	}
-	return b, nil
+	return numberOfChar
 }
