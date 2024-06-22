@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/wahyusumartha/coding-challenges/wc"
 	"io"
 	"os"
@@ -17,6 +18,7 @@ func main() {
 	outputCmd := parseCommands(commands)
 	input, err := determineInput(flag.Args())
 	if err != nil {
+		_, _ = fmt.Fprintf(os.Stdout, "[ccwc] %s\n", err)
 		os.Exit(1)
 	}
 
@@ -24,6 +26,7 @@ func main() {
 	fileName := input.fileName
 
 	wc.PrintCommandOutput(b, fileName, outputCmd)
+	os.Exit(0)
 }
 
 func parseCommands(commands []wc.Command) []wc.PrintableCommand {
