@@ -18,7 +18,7 @@ func main() {
 	outputCmd := parseCommands(commands)
 	input, err := determineInput(flag.Args())
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stdout, "[ccwc] %s\n", err)
+		fmt.Printf("[ccwc] %s\n", err)
 		os.Exit(1)
 	}
 
