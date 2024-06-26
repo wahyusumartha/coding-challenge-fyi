@@ -25,7 +25,7 @@ func main() {
 	b := input.byte
 	fileName := input.fileName
 
-	wc.PrintCommandOutput(b, fileName, outputCmd)
+	wc.PrintCommandOutput(os.Stdout, b, fileName, outputCmd)
 	os.Exit(0)
 }
 

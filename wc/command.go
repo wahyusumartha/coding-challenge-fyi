@@ -1,10 +1,12 @@
 package wc
 
+import "io"
+
 type Command interface {
 	Usage() string
 	Name() string
 	Default() bool
-	PrintOutput(hasCommand *bool, bytes []byte, fileName string)
+	PrintOutput(w io.Writer, hasCommand *bool, bytes []byte, fileName string)
 }
 
 type BytesLengthCommand struct{}
@@ -23,8 +25,9 @@ func (c BytesLengthCommand) Default() bool {
 	return false
 }
 
-func (c BytesLengthCommand) PrintOutput(hasCommand *bool, bytes []byte, fileName string) {
+func (c BytesLengthCommand) PrintOutput(w io.Writer, hasCommand *bool, bytes []byte, fileName string) {
 	printCalculationProcess(
+		w,
 		hasCommand,
 		bytes,
 		fileName,
@@ -48,8 +51,9 @@ func (l LineCounterCommand) Default() bool {
 	return false
 }
 
-func (l LineCounterCommand) PrintOutput(hasCommand *bool, bytes []byte, fileName string) {
+func (l LineCounterCommand) PrintOutput(w io.Writer, hasCommand *bool, bytes []byte, fileName string) {
 	printCalculationProcess(
+		w,
 		hasCommand,
 		bytes,
 		fileName,
@@ -73,8 +77,9 @@ func (w WordCounterCommand) Default() bool {
 	return false
 }
 
-func (w WordCounterCommand) PrintOutput(hasCommand *bool, bytes []byte, fileName string) {
+func (w WordCounterCommand) PrintOutput(writer io.Writer, hasCommand *bool, bytes []byte, fileName string) {
 	printCalculationProcess(
+		writer,
 		hasCommand,
 		bytes,
 		fileName,
@@ -98,8 +103,9 @@ func (c CharacterCounterCommand) Default() bool {
 	return false
 }
 
-func (c CharacterCounterCommand) PrintOutput(hasCommand *bool, bytes []byte, fileName string) {
+func (c CharacterCounterCommand) PrintOutput(w io.Writer, hasCommand *bool, bytes []byte, fileName string) {
 	printCalculationProcess(
+		w,
 		hasCommand,
 		bytes,
 		fileName,

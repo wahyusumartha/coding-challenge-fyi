@@ -5,7 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/wahyusumartha/coding-challenges/wc"
 	"io"
-	"os"
 	"testing"
 )
 
@@ -133,6 +132,7 @@ func TestPrintCommandOutput_WhenInputStdIn(t *testing.T) {
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			assert.Equal(
 				t,
 				test.expected,
@@ -266,6 +266,7 @@ func TestPrintCommandOutput_WhenInputFileName(t *testing.T) {
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			assert.Equal(
 				t,
 				test.expected,
@@ -284,26 +285,9 @@ func captureStdout(
 	b []byte,
 	fileName string,
 	cmd []wc.PrintableCommand,
-	f func([]byte, string, []wc.PrintableCommand),
+	f func(io.Writer, []byte, string, []wc.PrintableCommand),
 ) string {
-	oldStdOut := os.Stdout
-
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-
-	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		f(b, fileName, cmd)
-		_ = w.Close()
-	}()
-
 	var buf bytes.Buffer
-	_, _ = io.Copy(&buf, r)
-	_ = r.Close()
-	os.Stdout = oldStdOut
-
-	<-done
-
+	f(&buf, b, fileName, cmd)
 	return buf.String()
 }

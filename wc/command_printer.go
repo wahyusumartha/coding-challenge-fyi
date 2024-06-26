@@ -2,20 +2,23 @@ package wc
 
 import (
 	"fmt"
+	"io"
 )
 
 func printAllCommandsOutput(
+	w io.Writer,
 	printableCmd []PrintableCommand,
 	bytes []byte,
 	fileName string,
 ) {
 	hasArgs := true
 	for _, c := range printableCmd {
-		c.Cmd.PrintOutput(&hasArgs, bytes, fileName)
+		c.Cmd.PrintOutput(w, &hasArgs, bytes, fileName)
 	}
 }
 
 func printCalculationProcess(
+	outputWriter io.Writer,
 	shouldPrint *bool,
 	bytes []byte,
 	fileName string,
@@ -26,11 +29,11 @@ func printCalculationProcess(
 	}
 
 	count := f(bytes)
-	fmt.Printf("\t%d\t%s\n", count, fileName)
-
+	_, _ = fmt.Fprintf(outputWriter, "\t%d\t%s\n", count, fileName)
 }
 
 func PrintCommandOutput(
+	w io.Writer,
 	bytes []byte,
 	fileName string,
 	printableCmds []PrintableCommand,
@@ -41,6 +44,7 @@ func PrintCommandOutput(
 			shouldDisplayAll = false
 		}
 		printableCmd.Cmd.PrintOutput(
+			w,
 			printableCmd.HasArgs,
 			bytes,
 			fileName,
@@ -49,6 +53,7 @@ func PrintCommandOutput(
 
 	if shouldDisplayAll {
 		printAllCommandsOutput(
+			w,
 			printableCmds,
 			bytes,
 			fileName,
